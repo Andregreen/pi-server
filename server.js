@@ -38,10 +38,14 @@ serialport.on('readable',function(chunk) {
     value=null;
   }
   else {
-    unqId=data.slice(0,5).toString();
+    unqId=data.slice(0,6).toString();
     value=data.slice(6,8).toString();
-    var unqIdA = new Buffer(unqId, 'hex');
-    var valueA = new Buffer(value, 'hex');
+    if(value=="on"){
+      value=1;
+    }
+    else if(value=="of"){
+      value=0
+    }
     database.ref('Users/'+ userID + '/GardenZones/My Garden/Sensors/'+unqId).update({
       data: value,
       icon: 'opacity',
@@ -55,12 +59,6 @@ serialport.on('readable',function(chunk) {
   }
   console.log('Unique id:',unqId);
   console.log('Value:',value);
-
-  //buffer.slice(0, 3);
-  //var textChunk = decoder.write(chunk);
-  
-  //console.log(textChunk)
-  // process utf8 text chunk
 });
 
 
